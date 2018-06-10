@@ -26,13 +26,15 @@ namespace Cyfrowy_Poeta_2000_serwer
                     Console.WriteLine("Wybierz 2, aby dodać nowe słowe.");
                     Console.WriteLine("Wybierz 3, aby wylączyć test.");
                     Console.WriteLine("Wybierz 4, aby wyłączyć program.");
-                    if (Console.ReadKey().Key == ConsoleKey.D1)
+
+                    string klucz = Console.ReadLine();
+                    if (klucz == "1")
                     {
                         Console.Clear();
                         Program.b = "Pracuje";
                         Console.WriteLine("Naciśnij klawisz, aby kontynuować");
                     }
-                    else if (Console.ReadKey().Key == ConsoleKey.D2)
+                    else if (klucz == "2")
                     {
                         Console.Clear();
                         Console.WriteLine("Dodawanie nowego słowa\n");
@@ -40,35 +42,45 @@ namespace Cyfrowy_Poeta_2000_serwer
                         Console.ReadKey();
                         Writeslowa();
                     }
-                    else if (Console.ReadKey().Key == ConsoleKey.D4)
+                    else if (klucz == "4")
                     {
                         Console.Clear();
                         Console.WriteLine("Aby zakończyć wczyścnij dowolny klawisz...\n");
                         Console.ReadKey();
                         break;
                     }
-                    else if (Console.ReadKey().Key == ConsoleKey.D3)
+                    else if (klucz == "3")
                     {
                         Console.Clear();
                         Console.WriteLine("Naciśnij klawisz, aby kontynuować");
                         Console.ReadKey();
                         szukaj_rym();
                     }
+                    else
+                    {
+                        Console.WriteLine("Bledne polecenie. Sprobuj jeszcze raz.");
+                        Console.WriteLine("Naciśnij klawisz, aby kontynuować");
+                        Console.ReadKey();
+                    }
                 }
                 else if (b == "Pracuje")
                 {
-                    if (Console.ReadKey().Key == ConsoleKey.D1)
+                    Console.Clear();
+                    Console.WriteLine("Serwer pracuje\n");
+                    Console.WriteLine("Wybierz 1, aby wyłączyć serwer.");
+                    string klucz = Console.ReadLine();
+                    if (klucz == "1")
                     {
-                        Console.Clear();
-                        Console.WriteLine("Serwer pracuje\n");
-                        Console.WriteLine("Wybierz 1, aby wyłączyć serwer.");
-                        if (Console.ReadKey().Key == ConsoleKey.D1)
-                        {
                             Console.Clear();
                             Console.WriteLine("Serwer wyłączony\n");
                             Program.b = "Nie pracuje";
                             Console.WriteLine("Naciśnij klawisz, aby kontynuować");
-                        }
+                        
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Bledne polecenie. SprObuj jeszcze raz.");
                     }
                 }
             }
@@ -79,26 +91,23 @@ namespace Cyfrowy_Poeta_2000_serwer
             Console.WriteLine("Podaj słowo:\n");
             string slowo = Console.ReadLine();
             string[] lines = System.IO.File.ReadAllLines(@"D:\Poeta\Slowa.txt");
-            string[] rymy = {""};
+            string[] rymy = { "" };
             int rym = 0;
-
+            int j = 0;
             int b = 0;
-            int a=0;
-            int r=0;
+            int a = 0;
+            int r = 0;
             int x;
 
-            Console.WriteLine(slowo.Length);
-            Console.ReadKey();
-            for (int i = slowo.Length-1; i >= 0; i--)
+            for (int i = slowo.Length - 1; i >= 0; i--)
             {
                 if (slowo[i] == 'a' || slowo[i] == 'e' || slowo[i] == 'y' || slowo[i] == 'u' || slowo[i] == 'i' || slowo[i] == 'o')
                 {
                     if (b == 1)
                     {
+                        j = a;
                         a = i;
                         r = slowo.Length - a - 1;
-                        Console.WriteLine(a);
-                        Console.WriteLine(r);
                         break;
                     }
                     else if (b == 0)
@@ -107,43 +116,53 @@ namespace Cyfrowy_Poeta_2000_serwer
                     }
                 }
             }
-            foreach (string line in lines)
-            {
-                if (line[line.Length-r] == slowo[a+1])
+
+            if(b==0)
+            { 
+                foreach (string line in lines)
                 {
-
-                    Console.WriteLine("asdasdwfac");
-                    for (x = line.Length - r; x <= line.Length; x++)
+                    if (line[line.Length - r] == slowo[a + 1])
                     {
-                        Console.WriteLine("qwerttyac");
-                        a++;
-                        Console.WriteLine(x);
-                        Console.WriteLine(a);
-                        if (line[x-1] != slowo[a-1])
-                        {
-                            break;
-                        }
-                        else
-                        {
-                        }
 
-                        if (line.Length == x)
+                        for (x = line.Length - r; x < line.Length; x++)
                         {
-                            if (rym == 0)
+                            a++;
+                            if (line[x - 1] != slowo[a - 1])
                             {
-                                rym = 1;
-                                rymy[0] = line;
+                                a = j;
+                                break;
                             }
-                            else if (rym == 1)
+                            else
                             {
-                                Array.Resize(ref rymy, rymy.Length + 1);
-                                rymy[rymy.Length] = line;
+                            }
+                            if (line.Length - 1 == x)
+                            {
+                                a = j;
+                                if (rym == 0)
+                                {
+                                    rym = 1;
+                                    rymy[0] = line;
+                                }
+                                else if (rym == 1)
+                                {
+                                    Array.Resize(ref rymy, rymy.Length + 1);
+                                    rymy[rymy.Length - 1] = line;
+                                }
                             }
                         }
                     }
                 }
             }
 
+            Console.Clear();
+            if (rymy[0] == "")
+            {
+                Console.WriteLine("Nie znaleziono rymow.");
+            }
+            else
+            {
+                Console.WriteLine("Znalezione rymy do " + slowo + ":");
+            }
             foreach (string line1 in rymy)
             {
                 Console.WriteLine(line1);

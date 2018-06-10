@@ -117,7 +117,7 @@ namespace Cyfrowy_Poeta_2000_serwer
                 }
             }
 
-            if(b==0)
+            if(b==1)
             { 
                 foreach (string line in lines)
                 {
